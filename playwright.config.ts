@@ -22,7 +22,8 @@ export default defineConfig({
 		}
 	],
 	webServer: {
-		command: 'npm run build && npm run preview -- --port 4173',
+		command:
+			'rm -rf .data-e2e && npm run build && DATA_DIR=.data-e2e ADMIN_OPEN=true npm run preview -- --port 4173',
 		port: 4173,
 		reuseExistingServer: !process.env.CI
 	}

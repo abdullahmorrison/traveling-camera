@@ -8,7 +8,9 @@ SvelteKit 3 (Svelte 5 runes) + TypeScript, adapter-node. Design source: Figma fi
 - Small PRs, one concern each. CI (`ci` job) must be green before merge.
 - Every behaviour change has a test: Vitest for logic in `src/**/*.spec.ts`, Playwright for flows in `e2e/*.e2e.ts`.
 - Use npm 11 (`npx -y npm@11 install`); npm 10 crashes resolving this dependency tree.
-- Imports use `#lib/...` (SvelteKit 3 subpath imports), not `$lib`.
+- Imports use `#lib/...js` (SvelteKit 3 subpath imports, `.js` maps to the `.ts` file), not `$lib`.
+- Links and `goto` use typed `resolve('/route/[param]', { param })` from `$app/paths`.
+- Env vars are declared in `src/env.ts` and imported from `$app/env/private`.
 
 ## Product rules that shape the code
 
