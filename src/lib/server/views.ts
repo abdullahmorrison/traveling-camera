@@ -1,4 +1,5 @@
 import { timeLeft } from '../chain/deadline';
+import { distanceKm } from '../chain/trail';
 import type { Chains, Place } from './chains';
 
 export type Role = 'holder' | 'follower' | 'ended';
@@ -16,6 +17,9 @@ export interface ChainView {
 	id: number;
 	startedAt: string;
 	holderCount: number;
+	/** Position of whoever has (or last had) the camera. */
+	currentPosition: number;
+	km: number;
 	role: Role;
 	/** Whether this device is (or was, if the chain ended) the last holder. */
 	isMine: boolean;
@@ -53,6 +57,8 @@ export function chainView(
 		id: chainId,
 		startedAt: holders[0]!.receivedAt.toISOString(),
 		holderCount: holders.length,
+		currentPosition: current.position,
+		km: Math.round(distanceKm(photos)),
 		role: ended ? 'ended' : isMine ? 'holder' : 'follower',
 		isMine,
 		msLeft: timeLeft(current.receivedAt, now),

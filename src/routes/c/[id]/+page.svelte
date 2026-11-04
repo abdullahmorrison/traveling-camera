@@ -4,9 +4,13 @@
 	import Countdown from '#lib/ui/Countdown.svelte';
 	import PhotoRow from '#lib/ui/PhotoRow.svelte';
 	import Sheet from '#lib/ui/Sheet.svelte';
+	import TrailMap from '#lib/ui/TrailMap.svelte';
+	import ZoomLevels from '#lib/ui/ZoomLevels.svelte';
+	import type { ZoomLevel } from '#lib/chain/trail.js';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
+	let level = $state<ZoomLevel>('neighbourhood');
 	const chain = $derived(data.chain);
 	const id = $derived(String(data.chain.id));
 	const chainLabel = $derived(`Chain ${String(chain.id).padStart(2, '0')}`);
@@ -21,10 +25,17 @@
 
 <main class="screen">
 	<div class="map">
+		<TrailMap photos={chain.photos} {level} highlight={chain.currentPosition} />
 		<header class="top">
 			<span class="chip dark mono">{chainLabel}</span>
-			<span class="chip mono">{chain.holderCount} holders · day {day}</span>
+			<span class="chip mono"
+				>{chain.holderCount}
+				{chain.holderCount === 1 ? 'holder' : 'holders'} · {chain.km.toLocaleString('en')} km · day {day}</span
+			>
 		</header>
+		{#if chain.photos.length}
+			<div class="zoom"><ZoomLevels bind:level /></div>
+		{/if}
 	</div>
 
 	<Sheet>
@@ -70,6 +81,7 @@
 		flex: 1;
 		min-height: 320px;
 		background: #ece5d6;
+		overflow: hidden;
 	}
 
 	.top {
@@ -77,6 +89,14 @@
 		inset: max(16px, env(safe-area-inset-top)) 16px auto;
 		display: flex;
 		justify-content: space-between;
+		pointer-events: none;
+	}
+
+	.zoom {
+		position: absolute;
+		bottom: 22px;
+		left: 50%;
+		transform: translateX(-50%);
 	}
 
 	.chip {

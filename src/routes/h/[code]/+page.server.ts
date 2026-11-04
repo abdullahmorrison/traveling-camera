@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { chains } from '#lib/server/app.js';
-import { photoUrl } from '#lib/server/views.js';
+import { chainView, photoUrl } from '#lib/server/views.js';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ params }) => {
@@ -13,6 +13,7 @@ export const load: PageServerLoad = ({ params }) => {
 	const first = photos[0]?.place;
 	return {
 		code: params.code,
+		photos: chainView(chains, chainId, null, now)?.photos ?? [],
 		status,
 		chainId,
 		before: holders.length,
