@@ -1,11 +1,14 @@
 import { join } from 'node:path';
 import type { Cookies } from '@sveltejs/kit';
-import { DATA_DIR } from '$app/env/private';
+import { DATA_DIR, GEOCODER } from '$app/env/private';
 import { Chains } from './chains';
 import { openDb } from './db';
+import { Places } from './places';
 
 export const photoDir = join(DATA_DIR, 'photos');
-export const chains = new Chains(openDb(join(DATA_DIR, 'app.db')));
+const db = openDb(join(DATA_DIR, 'app.db'));
+export const chains = new Chains(db);
+export const places = new Places(db, { enabled: GEOCODER === 'nominatim' });
 
 const HOLDER_COOKIE = 'tc_holder';
 

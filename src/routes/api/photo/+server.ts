@@ -3,8 +3,7 @@ import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { error, json } from '@sveltejs/kit';
 import { ChainError } from '#lib/server/chains.js';
-import { chains, photoDir } from '#lib/server/app.js';
-import { lookupPlace } from '#lib/server/places.js';
+import { chains, photoDir, places } from '#lib/server/app.js';
 import type { RequestHandler } from './$types';
 
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -31,7 +30,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	await writeFile(join(photoDir, name), new Uint8Array(await file.arrayBuffer()));
 
 	try {
-		const place = await lookupPlace(cell);
+		const place = await places.lookup(cell);
 		chains.savePhoto(token, { file: name, caption, cell, place }, new Date());
 	} catch (cause) {
 		await unlink(join(photoDir, name)).catch(() => {});

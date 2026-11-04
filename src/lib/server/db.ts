@@ -43,6 +43,16 @@ const MIGRATIONS = [
 	);
 
 	CREATE INDEX handoff_codes_by_holder ON handoff_codes (holder_id, created_at);
+	`,
+	`
+	CREATE TABLE places (
+		cell TEXT PRIMARY KEY,
+		neighbourhood TEXT,
+		city TEXT,
+		region TEXT,
+		country TEXT,
+		fetched_at INTEGER NOT NULL
+	);
 	`
 ];
 
