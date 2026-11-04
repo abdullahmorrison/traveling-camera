@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:${HOST_PORT:-3040}:3000'
+    environment:
+      # Public URL the app is served from; needed for form submissions behind a proxy.
+      ORIGIN: ${ORIGIN:?set ORIGIN in .env}
+      ADMIN_OPEN: ${ADMIN_OPEN:-false}
+    volumes:
+      - data:/data
+
+volumes:
+  data:

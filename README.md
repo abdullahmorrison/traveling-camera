@@ -19,3 +19,12 @@ npm run check    # svelte-check / typescript
 npx vitest run   # unit tests
 npx playwright test   # end-to-end, fake camera and GPS
 ```
+
+## Deploy
+
+```sh
+echo 'ORIGIN=https://your.host' > .env   # plus ADMIN_OPEN=true to allow /admin
+docker compose up -d --build
+```
+
+The app listens on `127.0.0.1:3040`; put HTTPS in front of it (camera and location need a secure origin). Data (SQLite and photos) lives in the `data` volume.
