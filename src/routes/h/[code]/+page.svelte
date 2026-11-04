@@ -6,6 +6,7 @@
 	import { LocationError, currentCell } from '#lib/client/location.js';
 	import Button from '#lib/ui/Button.svelte';
 	import Sheet from '#lib/ui/Sheet.svelte';
+	import TrailMap from '#lib/ui/TrailMap.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -59,7 +60,9 @@
 
 {#if step === 'intro'}
 	<main class="intro">
-		<div class="map"></div>
+		<div class="map">
+			<TrailMap photos={data.photos} level="neighbourhood" highlight={data.before} />
+		</div>
 		<Sheet>
 			<div class="head">
 				{#if data.faces.length}
@@ -141,8 +144,10 @@
 	}
 
 	.map {
+		position: relative;
 		flex: 1;
-		min-height: 120px;
+		min-height: 160px;
+		overflow: hidden;
 		background: #ece5d6;
 	}
 
